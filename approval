@@ -1,0 +1,20 @@
+pipeline {
+    agent any
+    stages {
+        stage('build') {
+            steps {
+                echo "building application"
+            }
+        }
+        stage('get approval') {
+            steps {
+                input "please provide your approval to proceed with deployment"
+            }
+        }
+        stage('deploy') {
+            steps {
+                echo "deploy application"
+            }
+        }
+    }
+}
