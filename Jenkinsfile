@@ -10,9 +10,14 @@ pipeline {
 	    stage ('scm') {
 		    steps {
 			    // Get some code from a GitHub repository
-                git credentialsId: 'github', url: 'git@github.com:P2001s/jenkins_test.git'
+                git credentialsId: 'github', url: 'git@github.com:sathishbob/jenkins_test.git'
 				}
 			}
+	    stage ('print stage') {
+		    steps {
+			    sh 'echo "new stage"'
+		    }
+	    }
         stage('Build') {
             steps {
                // Run Maven on a Unix agent.
@@ -26,8 +31,8 @@ pipeline {
                 // If Maven was able to run the tests, even if some of the test
                 // failed, record the test results and archive the jar file.
                 success {
-                   junit stdioRetention: '', testResults: 'api-gateway/target/surefire-reports/*.xml'
-                    archiveArtifacts artifacts: 'api-gateway/target/*.jar', followSymlinks: false
+                    junit stdioRetention: '', testResults: 'api-gateway/target/surefire-reports/*.xml'
+                    archiveArtifacts 'target/*.jar'
                 }
             }
         }
