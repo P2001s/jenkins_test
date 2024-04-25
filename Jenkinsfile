@@ -51,7 +51,7 @@ pipeline {
 	    stage('sonar quality gate') {
 		    steps {
 			    script {
-				    sleep(40)
+				    sleep(90)
 				    qg = waitForQualityGate()
 				    if (qg.status != 'OK') {
 					    error "pipeline aborted due to quality gate failure: ${qg.status}"
@@ -64,7 +64,7 @@ pipeline {
 			    script {
 				    sh '''
 					sudo rm -rf $PWD/report/* || true
-     					sudo chmod 777 $PWD
+     					sudo chmod -R 777 $PWD
      					sudo mkdir -p $PWD/OWASP-Dependency-Check/data
 	 				sudo mkdir -p $PWD/report
       					sudo chmod 777 $PWD/OWASP-Dependency-Check/data
@@ -79,4 +79,3 @@ pipeline {
             emailext body: "Please check console aouput at $BUILD_URL for more information\n", to: "sathishbabudevops@gmail.com", subject: 'Jenkinstraining - $PROJECT_NAME build completed sucessfully - Build number is $BUILD_NUMBER - Build status is $BUILD_STATUS' 
         }  
     }
-}
