@@ -43,7 +43,7 @@ pipeline {
 		       script {
 			       scannerHome = tool 'sonar';
 			       withSonarQubeEnv('sonar') {
-						sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=jenkins_test -Dsonar.projectName=jenkins_test -Dsonar.projectVersion=1.0 -Dsonar.projectBaseDir=$WORKSPACE -Dsonar.sources=$WORKSPACE -Dsonar.java.binaries=$WORKSPACE -Dsonar.exclusions='OWASP-Dependency-Check/**, dastreport/**, report/**'"
+						sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=jenkins_test -Dsonar.projectName=jenkins_test -Dsonar.projectVersion=1.0 -Dsonar.projectBaseDir=$WORKSPACE -Dsonar.sources=$WORKSPACE -Dsonar.java.binaries=$WORKSPACE -Dsonar.exclusions='OWASP-Dependency-Check/**, dastreport/**, vapt/**, report/**'"
 						}
 				}
 			}
@@ -126,6 +126,15 @@ pipeline {
 			    }
 		    }
 	    }
+	    stage('VAPT') {
+		    steps {
+			    script {
+				    sh '''
+	   				sudo chmod 777 $PWD/vapt
+					sudo docker run --rm -v $(pwd)/vapt:/openvas/results/ sathishbob/openvas /openvas/run_scan.py 123.123.123.123 openvas_scan_report -u root -p password'''
+			    }
+		    }
+	  }
     }
     post {
 	success {
